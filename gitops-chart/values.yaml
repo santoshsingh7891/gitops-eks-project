@@ -1,0 +1,25 @@
+replicaCount: 2
+
+image:
+  repository: 539247463081.dkr.ecr.ap-south-1.amazonaws.com/gitops-app
+  pullPolicy: Always
+  tag: latest
+
+serviceAccount:
+  create: true
+
+service:
+  type: LoadBalancer
+  port: 5000
+
+ingress:
+  enabled: false
+
+httpRoute:
+  enabled: false
+
+autoscaling:
+  enabled: false
+
+resources: {}
+
