@@ -5,14 +5,14 @@ on:
     branches:
       - main
 
-env:
-  AWS_REGION: ap-south-1
-  ECR_REPOSITORY: gitops-app
-  IMAGE_TAG: latest
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: ap-south-1
+      ECR_REPOSITORY: gitops-app
+      IMAGE_TAG: latest
 
     steps:
 
@@ -27,6 +27,7 @@ jobs:
         aws-region: ap-south-1
 
     - name: Login to Amazon ECR
+      id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build Docker Image
@@ -35,8 +36,24 @@ jobs:
 
     - name: Tag Docker Image
       run: |
-        docker tag gitops-app:latest 539247463081.dkr.ecr.ap-south-1.amazonaws.com/gitops-app:latest
+        docker tag gitops-app:latest \
+        ${{ steps.login-ecr.outputs.registry }}/gitops-app:latest
 
     - name: Push Docker Image
       run: |
-        docker push 539247463081.dkr.ecr.ap-south-1.amazonaws.com/gitops-app:latest
+        docker push \
+        ${{ steps.login-ecr.outputs.registry }}/gitops-app:latest
+
+    - name: Update Helm Chart Image Tag
+      run: |
+        sed -i 's/tag:.*/tag: latest/' gitops-chart/values.yaml
+
+    - name: Commit Updated Helm Values
+      run: |
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "github-actions"
+
+        git add gitops-chart/values.yaml
+        git commit -m "Updated image tag automatically" || echo "No changes to commit"
+
+        git push
