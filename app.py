@@ -4,6 +4,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "GitOps Application Running on AWS EKS with Istio"
+    return "GitOps + ArgoCD Auto Deployment Successful 🚀"
 
 app.run(host='0.0.0.0', port=5000)
