@@ -4,6 +4,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "GitOps + ArgoCD Auto Deployment Successful 🚀"
+    return "Production Grade GitOps CI/CD on AWS EKS 🚀"
 
 app.run(host='0.0.0.0', port=5000)
