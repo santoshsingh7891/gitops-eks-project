@@ -15,6 +15,8 @@ This project demonstrates a Production-Grade GitOps CI/CD Platform on AWS using:
 - Grafana
 - Amazon ECR
 
+The project automates containerized application deployment into Kubernetes using GitOps principles and CI/CD automation.
+
 ---
 
 # 🏗️ Architecture Diagram
@@ -36,6 +38,7 @@ This project demonstrates a Production-Grade GitOps CI/CD Platform on AWS using:
 | Istio | Service Mesh |
 | Prometheus | Monitoring |
 | Grafana | Visualization |
+| Kubernetes | Container Orchestration |
 
 ---
 
@@ -44,9 +47,26 @@ This project demonstrates a Production-Grade GitOps CI/CD Platform on AWS using:
 ```bash
 .
 ├── .github/workflows/
+│   └── deploy.yml
+│
 ├── gitops-chart/
+│   ├── templates/
+│   ├── Chart.yaml
+│   └── values.yaml
+│
 ├── k8s/
+│   ├── deployment.yaml
+│   └── service.yaml
+│
 ├── screenshots/
+│   ├── architecture-diagram.png
+│   ├── argocd-dashboard.png
+│   ├── grafana-dashboard.png
+│   ├── github-actions-success.png
+│   ├── application-running.png
+│   ├── eks-cluster.png
+│   └── ecr-image-push.png
+│
 ├── Dockerfile
 ├── app.py
 ├── requirements.txt
@@ -58,11 +78,14 @@ This project demonstrates a Production-Grade GitOps CI/CD Platform on AWS using:
 # 🚀 CI/CD Workflow
 
 1. Developer pushes code to GitHub
-2. GitHub Actions builds Docker image
-3. Docker image pushed to Amazon ECR
-4. ArgoCD monitors Git repository
-5. Kubernetes deployment updated automatically
-6. Application deployed into EKS cluster
+2. GitHub Actions triggers CI/CD pipeline
+3. Docker image is built automatically
+4. Docker image is pushed to Amazon ECR
+5. ArgoCD monitors GitHub repository
+6. Kubernetes manifests are synced automatically
+7. Application gets deployed into AWS EKS Cluster
+8. Prometheus collects metrics
+9. Grafana visualizes monitoring dashboards
 
 ---
 
@@ -107,24 +130,57 @@ This project demonstrates a Production-Grade GitOps CI/CD Platform on AWS using:
 # 📊 Monitoring Stack
 
 ## Prometheus
-Collects Kubernetes and application metrics.
+
+Prometheus is used for:
+
+- Kubernetes metrics collection
+- Node monitoring
+- Pod monitoring
+- CPU and Memory utilization tracking
+- Cluster health monitoring
+
+---
 
 ## Grafana
-Visualizes:
-- CPU usage
-- Memory usage
+
+Grafana dashboards visualize:
+
+- Cluster metrics
 - Pod metrics
-- Cluster health
+- Resource utilization
+- Node performance
+- Application health
+- Kubernetes monitoring dashboards
 
 ---
 
 # 🌐 Istio Service Mesh
 
 Istio provides:
+
 - Traffic Management
-- Security
-- Observability
 - Service Discovery
+- Observability
+- Security
+- Load Balancing
+- Service-to-Service Communication
+
+---
+
+# ☸️ Kubernetes Deployment
+
+The application is deployed into AWS EKS using:
+
+- Kubernetes Deployments
+- Kubernetes Services
+- Helm Charts
+- ArgoCD GitOps synchronization
+
+---
+
+# 📦 Docker Containerization
+
+The Flask application is containerized using Docker and stored inside Amazon ECR.
 
 ---
 
@@ -166,7 +222,43 @@ prometheus-community/kube-prometheus-stack
 
 ---
 
+## Install Istio
+
+```bash
+curl -L https://istio.io/downloadIstio | sh -
+
+istioctl install --set profile=demo -y
+```
+
+---
+
+## Build Docker Image
+
+```bash
+docker build -t gitops-app .
+```
+
+---
+
+## Push Docker Image to Amazon ECR
+
+```bash
+docker push <ECR-IMAGE-URL>
+```
+
+---
+
+## Deploy Using Helm
+
+```bash
+helm install gitops-app ./gitops-chart
+```
+
+---
+
 # 📈 Auto Scaling
+
+Horizontal Pod Autoscaler (HPA) is configured using:
 
 ```bash
 kubectl autoscale deployment gitops-app \
@@ -188,6 +280,24 @@ kubectl autoscale deployment gitops-app \
 - Service mesh using Istio
 - Horizontal Pod Autoscaling
 - AWS ECR integration
+- Automated Kubernetes deployment
+- GitHub Actions automation
+- Production-grade AWS deployment
+
+---
+
+# 🔮 Future Enhancements
+
+- Terraform Infrastructure Automation
+- AWS Load Balancer Controller
+- ExternalDNS Integration
+- HTTPS using ACM
+- Loki Logging Stack
+- Blue/Green Deployment
+- Multi-Environment Deployment
+- Karpenter Auto Scaling
+- Jenkins Integration
+- Canary Deployments
 
 ---
 
@@ -197,3 +307,13 @@ Santosh Singh
 
 GitHub:
 https://github.com/santoshsingh7891
+
+LinkedIn:
+https://www.linkedin.com/in/santosh-singh-141a5775/
+
+Repository:
+https://github.com/santoshsingh7891/gitops-eks-project
+
+---
+
+# ⭐ If you like this project, don't forget to Star the repository!
